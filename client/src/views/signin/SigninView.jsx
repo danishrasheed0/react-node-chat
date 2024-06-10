@@ -1,25 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import UseHttpRequest from "../../hooks/useApi";
 import UseAauth from "../../hooks/auth-hook";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-const SigninView = () => {
+const SigninView = ({ onLoginIn }) => {
+  const navigate = useNavigate();
+
   const { login } = UseAauth();
   const { isLoading, sendRequest } = UseHttpRequest((response) => {
-    console.log(response);
     login(response.data);
+    onLoginIn();
     toast.success("User authenticated");
+    navigate("/dashboard");
   });
+
   const [formData, setFormData] = useState({ email: "", password: "" });
+
   const formHandler = (value, key) => {
     setFormData((preState) => {
       return { ...preState, ...{ [key]: value } };
     });
   };
+
   const loginHandler = () => {
     sendRequest(`users/signin`, "POST", formData);
   };
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-full max-w-md p-8 space-y-6 bg-white custom-shadow rounded-lg">
@@ -94,7 +102,7 @@ const SigninView = () => {
               type="button"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              {isLoading ? "Loading ... " : "Sign in"}
+              {isLoading ? "Loading ..." : "Sign in"}
             </button>
           </div>
           <div className="text-center text-sm text-gray-600">
@@ -111,4 +119,9 @@ const SigninView = () => {
     </div>
   );
 };
+
+SigninView.propTypes = {
+  onLoginIn: PropTypes.func,
+};
+
 export default SigninView;

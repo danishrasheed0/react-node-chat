@@ -11,8 +11,9 @@ import ChatView from "./views/chat/ChatView";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const isAuthenticatedHandler = () =>
+  const isAuthenticatedHandler = () => {
     setIsAuthenticated(!!localStorage.getItem("token"));
+  };
 
   useEffect(() => {
     isAuthenticatedHandler();
@@ -33,20 +34,28 @@ function App() {
             <Route
               path="/"
               element={
-                isAuthenticated ? <Navigate to="/dashboard" /> : <SigninView />
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" />
+                ) : (
+                  <SigninView onLoginIn={isAuthenticatedHandler} />
+                )
               }
             />
             <Route
               path="/signin"
               element={
-                isAuthenticated ? <Navigate to="/dashboard" /> : <SigninView />
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" />
+                ) : (
+                  <SigninView onLoginIn={isAuthenticatedHandler} />
+                )
               }
             />
             <Route
               path="/dashboard"
-              element={isAuthenticated ? <MainLayout /> : <Navigate to="/" />}
+              element={isAuthenticated ? <MainLayout onSignOut={isAuthenticatedHandler} /> : <Navigate to="/" />}
             >
-              <Route index element={<ChatView />} />
+              <Route index element={<ChatView  />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

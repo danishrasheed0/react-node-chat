@@ -14,9 +14,7 @@ const ChatboxPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-indigo-600 text-white py-4 px-6">
-        <h1 className="text-2xl font-bold">Chat with User</h1>
-      </header>
+
       {/* Chat List */}
 
       <div className="flex-grow bg-gray-100 p-4 overflow-y-auto">
