@@ -66,10 +66,8 @@ const userSchema = new mongoose.Schema(schemaRules);
 // Pre middlewares
 
 userSchema.pre("save", async function (next) {
-  console.log(this.password,'pre')
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 12);
-  console.log(this.password,'post')
   this.confirmPassword = undefined;
   this.passwordUpdatedAt = Date.now() - 1000;
   next();
